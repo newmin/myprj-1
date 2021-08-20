@@ -48,19 +48,19 @@
       <div class="inner main-inner">
       	<main>
       		<form class="frm" action="/login" method="post" th:object="${loginForm}">
-      			<h3 class="frm-title">로그인</h3>
+      			<h3 class="frm-title" th:text="#{title.form.login}">로그인</h3>
       			<ul>	
       				<li th:errors="*{global}" th:errorclass="field-msg">
 								<p th:each="err : ${#fields.globalErrors()}"
 																			 th:text="${err}">글로벌 오류 메시지</p>      				
       				</li>
-      				<li><input class="frm-ctr" type="text" name="email" id="email" placeholder="아이디를 입력하세요"
-      									 th:value="${loginForm.email}"/></li>
-							<li th:errors="${loginForm.email}" th:errorclass="field-msg">오류메세지</li>      									 
-      				<li><input class="frm-ctr" type="password" name="pw" id="pw" placeholder="비밀번호를 입력하세요"
-      									 th:value="${loginForm.pw}"/></li>
-							<li th:errors="${loginForm.pw}" th:errorclass="field-msg">오류메세지</li>      									 
-      				<li><button class="frm-ctr" type="submit">로그인</button></li>
+      				<li><input class="frm-ctr" type="text" placeholder="아이디를 입력하세요"
+      									 th:field="*{email}"/></li>
+							<li th:errors="*{email}" th:errorclass="field-msg">오류메세지</li>      									 
+      				<li><input class="frm-ctr" type="password" placeholder="비밀번호를 입력하세요"
+      									 th:field="*{pw}"/></li>
+							<li th:errors="*{pw}" th:errorclass="field-msg">오류메세지</li>      									 
+      				<li><button class="frm-ctr" type="submit" th:text="#{btn.login}" >로그인</button></li>
       			</ul>
       		</form>
       	</main>

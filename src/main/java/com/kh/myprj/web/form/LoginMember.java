@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class LoginMember {
-	private String id;
+	private String email;
 	private String nickname;
-	private boolean admin;
+	private String role;
 }

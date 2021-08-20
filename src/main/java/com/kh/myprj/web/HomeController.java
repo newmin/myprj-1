@@ -28,7 +28,11 @@ public class HomeController {
 		
 	//로그인 양식
 	@GetMapping("/login")
-	public String loginForm(@ModelAttribute LoginForm loginForm) {
+	public String loginForm(Model model
+			//@ModelAttribute LoginForm loginForm
+	) {
+		
+		model.addAttribute("loginForm", new LoginForm());
 		return "loginForm";
 	}
 	
@@ -44,11 +48,12 @@ public class HomeController {
 		LoginMember loginMember = null;		
 		//계정확인
 		if("user@test.com".equals(loginForm.getEmail()) && "user1234".equals(loginForm.getPw())) {
-			loginMember = new LoginMember("user","회원",false);
+			loginMember = new LoginMember("user","회원","user");
 		}else if("admin@test.com".equals(loginForm.getEmail()) && "admin1234".equals(loginForm.getPw())){
-			loginMember = new LoginMember("admin","관리자",true);
+			loginMember = new LoginMember("admin","관리자","admin");
 		}else {
-			bindingResult.reject("loginChk", "아이디 또는 비밀번호가 잘못되었습니다");			
+			//글로벌 오류 추가
+			bindingResult.reject("loginChk", "아이디 또는 비밀번호가 잘못되었습니다");					
 		}
 		//글로벌오류 체크
 		if(bindingResult.hasErrors()) {
@@ -57,6 +62,7 @@ public class HomeController {
 		}
 		
 		//세션생성
+		//세션이 있으면 가져오고 없으면 새롭게 생성
 		HttpSession session =request.getSession(true);
 		session.setAttribute("loginMember", loginMember );
 		
@@ -65,8 +71,18 @@ public class HomeController {
 	
 	//로그아웃
 	@GetMapping("/logout")
-	public String logout() {
-		//세션제거
+	public String logout(HttpServletRequest request) {
+		//세션이 존재하면 가져오고 없으면 세션을 생성하지 않는다.
+		HttpSession session = request.getSession(false);
+		
+		if(session !=null ) {
+			session.invalidate(); //세션제거
+		}
 		return "home";
 	}
 }
+
+
+
+
+
