@@ -24,12 +24,10 @@
   	.global-wrap .main main{
   		display:flex;
   		justify-content: center;
-  		align-items: center;
-  		height:50vh;
   	}
   	.global-wrap .main .frm{
-  		width:200px;
-  		border:1px solid #ccc;
+  		width:250px;
+  		margin:100px 0;
   	}
   	.global-wrap .main .frm .frm-ctr {
   		width:100%;
@@ -49,9 +47,13 @@
     <div class="main">
       <div class="inner main-inner">
       	<main>
-      		<form class="frm" action="/login" method="post">
+      		<form class="frm" action="/login" method="post" th:object="${loginForm}">
       			<h3 class="frm-title">로그인</h3>
-      			<ul>
+      			<ul>	
+      				<li th:errors="*{global}" th:errorclass="field-msg">
+								<p th:each="err : ${#fields.globalErrors()}"
+																			 th:text="${err}">글로벌 오류 메시지</p>      				
+      				</li>
       				<li><input class="frm-ctr" type="text" name="email" id="email" placeholder="아이디를 입력하세요"
       									 th:value="${loginForm.email}"/></li>
 							<li th:errors="${loginForm.email}" th:errorclass="field-msg">오류메세지</li>      									 
