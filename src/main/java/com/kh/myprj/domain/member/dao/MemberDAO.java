@@ -12,6 +12,16 @@ public interface MemberDAO {
 	 */
 	long insert(MemberDTO memberDTO);
 	
+	
+	//MemberDTO findByIDPw(String id, String pw);
+	/**
+	 * 취미 추가
+	 * @param id
+	 * @param hobbies
+	 */
+	void addHobby(long id,List<String> hobbies);
+	void delHobby(long id);
+	
 	/**
 	 * 조회 by id
 	 * @param id

@@ -47,44 +47,47 @@
 							<li><h3 class="title">회원 가입</h3></li>
 							<li><label for="email">아이디</label></li>
 							<li><input type="text" th:field="*{email}"/></li>
+							<li th:errors="*{email}" th:errorclass="field-msg"></li>
 							<li><label for="pw">비밀번호</label></li>
 							<li><input type="password" th:field="*{pw}"/></li>
+							<li th:errors="*{pw}" th:errorclass="field-msg"></li>
 							<li><label for="pwchk">비밀번호 확인</label></li>
-							<li><input type="password" id="pwchk"></li>
+							<li><input type="password" th:field="*{pwchk}"></li>
+							<li th:errors="*{pwchk}" th:errorclass="field-msg"></li>
 							<li><label for="tel">전화번호</label></li>
 							<li><input type="tel" name="tel" th:field="*{tel}"/></li>
+							<li th:errors="*{tel}" th:errorclass="field-msg"></li>
 							<li><label for="nickname">별칭</label></li>
-							<li><input type="text" name="nickname" /></li>
+							<li><input type="text" th:field="*{nickname}" /></li>
+							<li th:errors="*{nickname}" th:errorclass="field-msg"></li>							
 							<li><label for="gender">성별</label></li>
-							<li><label for="gender">남</label>
-									<input type="radio" name="gender" id="male" />
-									<label name="gender">여</label>
-									<input type="radio" name="gender" id="famale" />
+							<li>
+								<th:block th:each="item : ${gender}">
+									<label th:for="${#ids.next('gender')}" th:text="${item.decode}">남</label>
+									<input type="radio" th:field="*{gender}" th:value="${item.decode}"/>
+								</th:block>
 							</li>
 							<li><label for="region">지역</label></li>
-							<li><select name="region">
-									<option value="">선택</option>
-									<option value="">울산</option>
-									<option value="">부산</option>
+							<li><select th:field="*{region}">
+									<option value="">==선택==</option>
+									<option th:each="item : ${region}"
+													th:value="${item.code}" th:text="${item.decode}">울산</option>
 							</select></li>
 							<li><label for="birth">생년월일</label></li>
-							<li><input type="date" name="birth" /></li>					
+							<li><input type="date" th:field="*{birth}" /></li>		
+							<li th:errors="*{birth}" th:errorclass="field-msg"></li>				
 							<li><label for="hobby">취미</label></li>
 							<li>
 								<div class="hobby">
-									<lable>등산</lable>
-									<input type="checkbox" name="hobby" id="hobby" />
-									<lable>수영</lable>
-									<input type="checkbox" name="hobby" id="hobby" />
-									<lable>음악</lable>
-									<input type="checkbox" name="hobby" id="hobby" />
-									<lable>영화</lable>
-									<input type="checkbox" name="hobby" id="hobby" />
+									<th:block th:each="item : ${hobby}">
+									<lable th:for="${#ids.next('hobby')}" th:text="${item.decode}">등산</lable>
+									<input type="checkbox" th:field="*{hobby}" th:value="${item.code}"/>
+									</th:block>
 								</div>
 							</li>
 							<li><span class="errmsg" id="errmsg_birth"></span></li>
 							<li>
-								<input type="checkbox" name="letterYN" id="letterYN" /><span>뉴스레터 수신에 동의합니다.</span>
+								<input type="checkbox" th:field="*{letter}"/><span>뉴스레터 수신에 동의합니다.</span>
 							</li>								
 							<li><input type="submit" value="회원가입" id="joinBtn"></li>
 						</ul>

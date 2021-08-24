@@ -9,6 +9,7 @@ import lombok.Data;
 public class JoinForm {
 	private String email;						//아이디(이메일)
 	private String pw;							//비밀번호
+	private String pwchk;						//비밀번호확인			
 	private String tel;							//연락처
 	private String nickname;				//별칭
 	private String gender;					//성별

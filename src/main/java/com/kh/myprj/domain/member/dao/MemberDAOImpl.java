@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -70,10 +71,36 @@ public class MemberDAOImpl implements MemberDAO {
 			}
 		},keyHolder);
 		
-		
-		return keyHolder.getKeyAs(BigDecimal.class).longValue();
+		return  keyHolder.getKeyAs(BigDecimal.class).longValue();
 	}
-
+	
+	//취미
+	@Override
+	public void addHobby(long id,List<String> hobbies) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("insert into hobby (member_id, code_code) values ( ? , ? )");
+		
+		jt.batchUpdate(sql.toString(), new BatchPreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setLong(1, id);
+				ps.setString(2, hobbies.get(i));				
+			}
+			
+			@Override
+			public int getBatchSize() {
+				return hobbies.size();
+			}
+		});
+	}
+	//취미 삭제
+	@Override
+	public void delHobby(long id) {
+		String sql = "delete from hobby where id = ? ";
+		jt.update(sql, id);
+	}
+	
 	//회원조회 by id
 	@Override
 	public MemberDTO findByID(long id) {

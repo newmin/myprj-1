@@ -74,7 +74,8 @@ public class HomeController {
 	public String logout(HttpServletRequest request) {
 		//세션이 존재하면 가져오고 없으면 세션을 생성하지 않는다.
 		HttpSession session = request.getSession(false);
-		
+		//세션에서 클라이언트 정보 얻어내기
+		//LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
 		if(session !=null ) {
 			session.invalidate(); //세션제거
 		}

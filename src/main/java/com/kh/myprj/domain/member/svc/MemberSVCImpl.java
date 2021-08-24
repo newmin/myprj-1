@@ -1,5 +1,7 @@
 package com.kh.myprj.domain.member.svc;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.kh.myprj.domain.member.dao.MemberDAO;
@@ -18,6 +20,11 @@ public class MemberSVCImpl implements MemberSVC{
 	@Override
 	public void join(MemberDTO memberDTO) {
 		long id = memberDAO.insert(memberDTO);
+
+		List<String> hobby = memberDTO.getHobby();
+		if( hobby != null && hobby.size() > 0) {
+			memberDAO.addHobby(id,memberDTO.getHobby());
+		}		
 	}
 
 	@Override

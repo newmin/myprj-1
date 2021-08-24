@@ -18,5 +18,8 @@ public class CodeDAOImplTest {
 	@DisplayName("코드조회")
 	void code() {
 		log.info("A01:{}",codeDAO.getCode("A01"));
+		log.info("A02:{}",codeDAO.getCode("A02"));
+		log.info("A03:{}",codeDAO.getCode("A03"));
+		log.info("A04:{}",codeDAO.getCode("A04"));
 	}
 }
