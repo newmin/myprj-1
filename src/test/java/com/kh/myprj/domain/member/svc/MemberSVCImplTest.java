@@ -36,5 +36,12 @@ public class MemberSVCImplTest {
 		log.info("mdto2:{}",mdto2);
 		Assertions.assertThat(mdto2).isEqualTo(null);
 	}
+	
+	@Test
+	@DisplayName("이메일로 회원정보 가져오기")
+	void findByEmail() {
+		MemberDTO mdto = mSVC.findByEmail("test4@test.com");
+		log.info("mdto:{}",mdto);
+	}
 }
 

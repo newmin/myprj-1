@@ -1,9 +1,9 @@
 package com.kh.myprj.web.form;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class LoginMember {
 	private long id;				//서버내부적으로 관리하는 아이디
