@@ -23,6 +23,7 @@ import com.kh.myprj.domain.member.dto.MemberDTO;
 import com.kh.myprj.domain.member.svc.MemberSVC;
 import com.kh.myprj.web.form.Code;
 import com.kh.myprj.web.form.LoginMember;
+import com.kh.myprj.web.form.member.ChangePwForm;
 import com.kh.myprj.web.form.member.EditForm;
 import com.kh.myprj.web.form.member.JoinForm;
 
@@ -178,28 +179,7 @@ public class MemberController {
 		log.info("회원조회 호출됨");
 		log.info("회원:{}",id);
 		return "members/view";
-	}
-	
-	/**
-	 * 비밀번호 변경
-	 * @return
-	 */
-	@GetMapping("/pw")
-	public String changePwForm() {
-		
-		return "members/changePwForm";
-	}
-	
-	/**
-	 * 비밀번호 변경처리
-	 * @return
-	 */
-	@PatchMapping("/pw")
-	public String changePw() {
-		
-		return "redirect:/members/mypage";
-	}
-	
+	}	
 	
 	/**
 	 * 회원 탈퇴
@@ -230,4 +210,62 @@ public class MemberController {
 		log.info("회원목록");
 		return "members/list";
 	}
+	
+	/**
+	 * 비밀번호 변경 양식
+	 * @return
+	 */
+	@GetMapping("/pw")
+	public String changePwForm(Model model) {
+		
+		model.addAttribute("changePwForm", new ChangePwForm());
+		
+		return "mypage/changePwForm";
+	}
+	/**
+	 * 비밀번호 변경 처리
+	 * @param changePwForm
+	 * @param bindingResult
+	 * @param request
+	 * @return
+	 */
+	@PatchMapping("/pw")
+	public String changePw(
+			@Valid @ModelAttribute ChangePwForm changePwForm,
+			BindingResult bindingResult,
+			HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		if(session == null) return "redirect:/";
+		
+		//변경할 비밀번호체크
+		if(!changePwForm.getPostpw().equals(changePwForm.getPostpwChk())) {
+			bindingResult.reject("error.member.changePw", "변경할 비밀번호가 일치하지 않습니다");
+		}
+		//이전 비밀번호와 변경할 비밀번호가 동일한지 체크
+		if(changePwForm.getPrepw().equals(changePwForm.getPostpw())) {
+			bindingResult.reject("error.member.changePw", "이전 비밀번호와 동일합니다.");
+		}		
+		
+		if(bindingResult.hasErrors()) {	
+			return "mypage/changePwForm";
+		}
+		
+		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+		
+		boolean result = memberSVC.changePw( loginMember.getEmail(), changePwForm.getPrepw(), changePwForm.getPostpw());
+		if(result) {
+			//세션 제거후 로긴화면 이동
+			session.invalidate();
+			return "redirect:/login";
+		}
+		bindingResult.reject("error.member.changePw", "비밀번호 변경 실패!");
+		
+		return "mypage/changePwForm";
+	}
 }
+
+
+
+
+

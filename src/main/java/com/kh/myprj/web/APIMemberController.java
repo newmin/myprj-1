@@ -1,9 +1,7 @@
 package com.kh.myprj.web;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +23,7 @@ public class APIMemberController {
 	private final MemberSVC memberSVC;
 	
 	//이메일 찾기
-	@GetMapping("/email")
+	@PostMapping("/email")
 	public JsonResult<String> findEamil(
 			@RequestBody FindEmailReq findEmailReq,
 			BindingResult bindingResult) {
@@ -42,7 +40,7 @@ public class APIMemberController {
 	}
 	
 	//비밀번호 찾기
-	@GetMapping("/pw")
+	@PostMapping("/pw")
 	public Object findPw(
 			@RequestBody FindPwReq findPwReq,
 			BindingResult bindingResult) {

@@ -100,4 +100,20 @@ public interface MemberDAO {
 	 */
 	String findPw(String email,String tel,Date birth);
 
+	/**
+	 * 회원 비밀번호 변경
+	 * @param prePw
+	 * @param postPw
+	 */
+	int changePw(String email, String prePw, String postPw);
 }
+
+
+
+
+
+
+
+
+
+
