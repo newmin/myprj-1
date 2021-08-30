@@ -7,7 +7,7 @@
       	~{},				<!--/* scripts 	생략 */-->
       	~{::style},				<!--/* style */-->
       	~{},				<!--/* header */-->
-      	_,					<!--/* nav */ 기본값 사용 */--> 
+      	~{::nav},		<!--/* nav 		대체 */--> 
       	~{::main},  <!--/* main 		대체 */-->
       	_  					<!--/* footer */ 기본값 사용 */--> 
       )}">
@@ -49,6 +49,14 @@
   	.global-wrap .main .frm ul li:last-child a:hover{
   		text-decoration: underline;
   	}
+  	.global-wrap .main .frm button[type='submit']{
+  	  background-color: #333; color:#fff;
+  	  padding:5px;
+  	  font-weight:bold;
+  	 }
+  	 .global-wrap .main .frm button[type='submit']:hover{
+  	 	cursor: pointer;
+  	 }
   </style>
 </head>
 <body>
@@ -58,6 +66,11 @@
         <header>헤더</header>
       </div>
     </div>
+    <div class="gnb">
+      <div class="inner gnb-inner">
+        <nav th:replace="~{fragment/gnb/menu::global}">메뉴</nav>
+      </div>
+    </div>      
     <div class="main">
       <div class="inner main-inner">
       	<main>
