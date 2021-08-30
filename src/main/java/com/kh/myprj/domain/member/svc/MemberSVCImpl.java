@@ -104,6 +104,12 @@ public class MemberSVCImpl implements MemberSVC{
 		memberDAO.delete(email);
 	}
 	
+	//email로 회원 탈퇴
+	@Override
+	public void outMember(String email, String pw) {
+		memberDAO.outMember(email, pw);
+	}
+	
 	//비밀번호 변경
 	@Override
 	public boolean changePw(String email, String prePw, String postPw) {

@@ -186,6 +186,7 @@ public class MemberDAOImpl implements MemberDAO {
 		sql.append("  from member ");
 		sql.append(" where email = ? ");
 		sql.append("   and pw = ? ");
+		sql.append("   and status is null ");
 		
 		Integer cnt = 
 				jt.queryForObject(sql.toString(), Integer.class, email, pw);
@@ -237,6 +238,18 @@ public class MemberDAOImpl implements MemberDAO {
 	public void delete(String email) {
 		String sql = "delete from member where email = ? ";
 		jt.update(sql, email);
+	}
+	
+	// email 회원 탈퇴
+	@Override
+	public void outMember(String email, String pw) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("update member ");
+		sql.append("	 set status = 'D' ");
+		sql.append(" where email = ? ");
+		sql.append("   and pw = ? ");
+		
+		jt.update(sql.toString(), email, pw);
 	}
 	
 	//회원아이디(이메일) 찾기

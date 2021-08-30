@@ -1,9 +1,11 @@
 package com.kh.myprj.web;
 
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.myprj.domain.member.svc.MemberSVC;
@@ -21,6 +23,23 @@ import lombok.extern.slf4j.Slf4j;
 public class APIMemberController {
 
 	private final MemberSVC memberSVC;
+	
+	//아이디(이메일) 중복체크
+	@GetMapping("/email/dupchk")
+	public JsonResult<String> dupChkEmail(
+			@RequestParam String email
+			){
+		
+		JsonResult<String> result = null;
+		if(memberSVC.isExistEmail(email)) {
+			result = new JsonResult<String>("00", "OK", email);
+		}else {
+			result = new JsonResult<String>("01", "NOK", null);
+		}
+		
+		return result;
+	}
+	
 	
 	//이메일 찾기
 	@PostMapping("/email")
@@ -54,6 +73,8 @@ public class APIMemberController {
 				memberSVC.findPw(findPwReq.getEmail(),findPwReq.getTel(),findPwReq.getBirth());
 		return new JsonResult<String>("00","ok",findedPw);
 	}
+	
+	//
 }
 
 
