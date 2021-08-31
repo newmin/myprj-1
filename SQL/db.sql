@@ -7,16 +7,18 @@ create table member(
   tel       varchar2(13),
   nickname  varchar2(30),--한글 3byte
   gender    char(3),
-  region    varchar2(30),
+  region    varchar2(11),
   birth     date,
   letter    char(1),
   fid       number(10),
+  status    char(1),
   cdate     timestamp default systimestamp,
   udate     timestamp,
   constraint member_id_pk primary key(id),
   constraint member_email_uk unique (email),
+  constraint member_region_fk foreign key (region) references code(code),
   --constraint member_pw_nn not null ,
-  constraint member_gender_ck check (gender in ('남','녀')),
+  constraint member_gender_ck check (gender in ('남','여')),
   constraint member_letter_ck check (letter in ('1','0'))
 );
 create sequence member_id_seq;
@@ -51,3 +53,10 @@ insert into code(code,decode,pcode,use_yn) values ('A0302','부산','A03','Y');
 insert into code(code,decode,pcode,use_yn) values ('A0303','울산','A03','Y');
 insert into code(code,decode,pcode,use_yn) values ('A0401','회원이미지','A04','Y');
 insert into code(code,decode,pcode,use_yn) values ('A0402','상품이미지','A04','Y');
+
+drop table hobby;
+create table hobby (
+  member_id number(8),
+  code_code varchar2(11),
+  constraint hobby_pk primary key(member_id,code_code)
+);
