@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
 import com.kh.myprj.domain.board.svc.BoardSVC;
 import com.kh.myprj.domain.common.dao.CodeDAO;
+import com.kh.myprj.web.api.JsonResult;
 import com.kh.myprj.web.form.Code;
 import com.kh.myprj.web.form.LoginMember;
 import com.kh.myprj.web.form.bbs.EditForm;
@@ -125,7 +127,11 @@ public class BoardController {
 	
 	//게시글 목록
 	@GetMapping("/list")
-	public String list() {
+	public String list(Model model) {
+		
+		List<BoardDTO> list = boardSVC.list();
+		
+		model.addAttribute("list", list);
 		
 		return "bbs/list";
 	}	
@@ -156,11 +162,11 @@ public class BoardController {
 	
 	//게시글 삭제
 	@DeleteMapping("/{bnum}")
-	public String delItem(@PathVariable Long bnum) {
+	@ResponseBody
+	public JsonResult<String> delItem(@PathVariable Long bnum) {
 
 		boardSVC.delItem(bnum);
-		
-		return "redirect:/bbs/list";
+		return new JsonResult<String>("01", "ok", String.valueOf(bnum));
 	}
 	
 }

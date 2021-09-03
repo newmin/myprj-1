@@ -4,7 +4,7 @@
       th:replace="~{fragment/main::copyParam(
       	~{::title},	<!--/* title 		대체 */-->
       	~{::link},	<!--/* links 		추가 */-->
-      	~{},				<!--/* scripts 	생략 */-->
+      	~{::script},				<!--/* scripts 	생략 */-->
       	~{::style},				<!--/* style */-->
       	~{},				<!--/* header */-->
       	~{::nav},					<!--/* nav */ 기본값 사용 */--> 
@@ -28,7 +28,7 @@
       letter-spacing: 0.5em;
     }
   </style>  
-  <script src="/js/xxx.js" defer></script>
+  <script src="/js/bbs/writeForm.js" defer></script>
   
 </head>
 <body>
@@ -102,9 +102,9 @@
 					      </div>
 					      <div class="row mb-3">
 					        <div class="col-sm-12 text-sm-end">
-					          <button type="submit" class="btn btn-primary">등록</button>
-					          <button type="button" class="btn btn-primary">취소</button>
-					          <button type="button" class="btn btn-primary">목록</button>
+					          <button type="submit" class="btn btn-primary" id="writeBtn">등록</button>
+					          <button type="reset" class="btn btn-primary" id="cancelBtn">취소</button>
+					          <button type="button" class="btn btn-primary" id="listBtn">목록</button>
 					        </div>
 					      </div>
 					    </form>
