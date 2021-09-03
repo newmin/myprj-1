@@ -1,11 +1,11 @@
-package com.kh.myprj.domain.board.dao;
+package com.kh.myprj.domain.board.svc;
 
 import java.util.List;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
 
-public interface BoardDAO {
-	
+public interface BoardSVC {
+
 	/**
 	 * 원글 작성
 	 * @param boardDTO
@@ -46,5 +46,4 @@ public interface BoardDAO {
 	 * @param bnum
 	 */
 	void delItem(Long bnum);
-	
 }
