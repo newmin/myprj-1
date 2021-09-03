@@ -166,7 +166,7 @@ public class BoardController {
 	public JsonResult<String> delItem(@PathVariable Long bnum) {
 
 		boardSVC.delItem(bnum);
-		return new JsonResult<String>("01", "ok", String.valueOf(bnum));
+		return new JsonResult<String>("00", "ok", String.valueOf(bnum));
 	}
 	
 }
