@@ -60,3 +60,58 @@ create table hobby (
   code_code varchar2(11),
   constraint hobby_pk primary key(member_id,code_code)
 );
+
+
+--게시판
+drop table board;
+create table board(
+  BNUM	    NUMBER(10),
+  BCATEGORY	VARCHAR2(11),
+  BTITLE	  VARCHAR2(150),
+  BID	      NUMBER(8),
+  BEMAIL	  VARCHAR2(40),
+  BNICKNAME	VARCHAR2(30),
+  BHIT	    NUMBER(5),
+  BCONTENT	CLOB,
+  PBNUM	    NUMBER(10),
+  BGROUP	  NUMBER(10),
+  BSTEP	    NUMBER(3),
+  BINDENT	  NUMBER(3),
+  STATUS	  CHAR(1),
+  BCDATE	  TIMESTAMP default systimestamp,
+  BUDATE	  TIMESTAMP,
+  constraint board_bnum_pk primary key(bnum),
+  constraint board_bcategory_fk foreign key(bcategory) references code(code),
+  constraint board_bid_fk foreign key(bid) references member(id),
+  constraint board_bemail_fk foreign key(bemail) references member(email)
+);
+drop sequence board_bnum_seq;
+create sequence board_bnum_seq
+increment by 1 --증감치
+start with 1 --시작값
+maxvalue 9999999999 --최대값
+nocycle;  --순환하지않음
+
+--첨부파일
+drop table uploadfile;
+create table uploadfile(
+  fid number(10),
+  rid varchar2(10) not null,
+  code varchar2(11) not null,
+  store_fname varchar2(50) not null,
+  upload_fname varchar2(50) not null,
+  fsize varchar2(45) not null,
+  ftype varchar2(100) not null,
+  cdate timestamp default systimestamp,
+  udate timestamp,
+  constraint uploadfile_fid_pk primary key(fid),
+  --constraint uploadfile_rid_fk1 FOREIGN key(rid) references product,  
+  constraint uploadfile_pid_fk2 FOREIGN key(code) references code
+);
+
+drop sequence uploadfile_fid_seq;
+create sequence uploadfile_fid_seq
+increment by 1 --증감치
+start with 1 --시작값
+maxvalue 9999999999 --최대값
+nocycle;  --순환하지않음

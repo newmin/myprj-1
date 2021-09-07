@@ -90,10 +90,13 @@
 					          <div th:errors="*{bcontent}" th:errorclass="field-msg"></div>
 					        </div>
 					      </div>
-					      <div class="row mb-3">
+					      <div class="row mb-3" >
 					        <label for="file" class="col-sm-2 col-form-label text-center">첨부</label>
-					        <div class="col-sm-10">
-					          <input type="file" class="form-control" id="file">
+					        <div class="col-sm-10" >
+					        	<p th:each="file : *{files}">
+					          	<a th:href="@{|/attach/${file.store_fname}/${file.upload_fname}}|"
+					          	 th:text="${file.upload_fname}"></a>
+					          </p>
 					        </div>
 					      </div>
 					      <div class="row mb-3">

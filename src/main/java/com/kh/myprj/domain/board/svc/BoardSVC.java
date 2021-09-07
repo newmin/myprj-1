@@ -3,6 +3,7 @@ package com.kh.myprj.domain.board.svc;
 import java.util.List;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
+import com.kh.myprj.domain.common.dto.MetaOfUploadFile;
 
 public interface BoardSVC {
 

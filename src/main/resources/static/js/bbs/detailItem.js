@@ -28,7 +28,7 @@ $delBtn.addEventListener("click", e=>{
 		request.delete(url)
 					 .then(res=>res.json())
 					 .then(res=>handler(res))
-					 .catch(err=>console.log(err));
+					 .catch(err=>console.log(err));					 
 	}	
 	
 });

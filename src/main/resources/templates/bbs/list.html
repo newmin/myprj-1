@@ -89,11 +89,11 @@
 				        <tbody>
 				          <tr th:each="item : ${list}">
 				            <th scope="row" th:text="${item.bnum}">1</th>
-				            <td>
+				            <td class="w-50">
 				            	<a href="#" th:href="@{|/bbs/${item.bnum}/|}" th:text="${item.btitle}">반갑습니다.</a>
 				            </td>
 				            <td th:text="${item.bnickname}">홍길동</td>
-				            <td th:text="${item.bcdate}">2021-09-01</td>
+				            <td th:text="${#calendars.format(item.bcdate,'yyyy-MM-dd hh:mm:ss')}">2021-09-01</td>
 				            <td th:text="${item.bhit}">10</td>
 				          </tr>
 				        </tbody>
