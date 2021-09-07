@@ -28,6 +28,11 @@ public interface UpLoadFileDAO {
 	void deleteFileByRid(String rid);
 	void deleteFileByRid(String rid,String code);
 	
+	/**
+	 * 참조번호로 첨부파일 가져오기
+	 * @param rid
+	 * @return
+	 */
 	List<String> getStore_Fname(String rid);
 	
 //	/**

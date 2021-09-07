@@ -12,6 +12,7 @@ import com.kh.myprj.domain.board.dto.BoardDTO;
 import com.kh.myprj.domain.common.dao.UpLoadFileDAO;
 import com.kh.myprj.domain.common.dto.MetaOfUploadFile;
 import com.kh.myprj.domain.common.dto.UpLoadFileDTO;
+import com.kh.myprj.domain.common.file.FileStore;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class BoardSVCImpl implements BoardSVC {
 
 	private final BoardDAO boardDAO;
 	private final UpLoadFileDAO upLoadFileDAO;
+	private final FileStore fileStore;
 
 	
 	//원글작성
@@ -65,11 +67,16 @@ public class BoardSVCImpl implements BoardSVC {
 	//게시글 상세
 	@Override
 	public BoardDTO itemDetail(Long bnum) {
+		//게시글 가져오기
 		BoardDTO boardDTO = boardDAO.itemDetail(bnum);
 		
+		//첨부파일 가져오기
 		boardDTO.setFiles(
 				upLoadFileDAO.getFiles(
 						String.valueOf(boardDTO.getBnum()), boardDTO.getBcategory()));
+		
+		//조회수증가
+		boardDAO.updateBhit(bnum);
 		return boardDTO;
 	}
 
@@ -83,6 +90,11 @@ public class BoardSVCImpl implements BoardSVC {
 	//게시글 삭제
 	@Override
 	public void delItem(Long bnum) {
+		//게시글 삭제
 		boardDAO.delItem(bnum);
+		//서버파일 시스템에 있는 업로드 파일삭제
+		fileStore.deleteFiles(upLoadFileDAO.getStore_Fname(String.valueOf(bnum)));
+		//업로드 파일 메타정보 삭제
+		upLoadFileDAO.deleteFileByRid(String.valueOf(bnum));		
 	}
 }

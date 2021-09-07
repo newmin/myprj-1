@@ -94,7 +94,7 @@ public class BoardController {
 		BoardDTO boardDTO = new BoardDTO();
 		BeanUtils.copyProperties(writeForm, boardDTO);
 		
-		//첨부파일 메타정보 추출
+		//첨부파일 파일시스템에 저장후 메타정보 추출
 		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(writeForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));
