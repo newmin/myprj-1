@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 public class ReplyForm {
 	private Long 	 pbnum;				//부모글 번호
+
 	@NotBlank
 	private String bcategory;
 	@NotBlank

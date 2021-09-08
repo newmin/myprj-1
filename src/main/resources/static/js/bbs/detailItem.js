@@ -14,19 +14,19 @@ const handler = e => {
 	}
 }
 //답글
-$replyBtn.addEventListener("click",e=>{
+$replyBtn?.addEventListener("click",e=>{
 		const bnum = e.target.dataset.bnum;
 	location.href=`/bbs/reply/${bnum}`;	
 });
 
 //수정
-$modifyBtn.addEventListener("click", e=>{
+$modifyBtn?.addEventListener("click", e=>{
 	const bnum = e.target.dataset.bnum;
 	location.href = `/bbs/${bnum}/edit`;
 });
 
 //삭제
-$delBtn.addEventListener("click", e=>{
+$delBtn?.addEventListener("click", e=>{
 	const bnum = e.target.dataset.bnum;
 	const url = `/bbs/${bnum}`;
 	
@@ -40,7 +40,7 @@ $delBtn.addEventListener("click", e=>{
 });
 
 //목록
-$listBtn.addEventListener("click", e=>{
+$listBtn?.addEventListener("click", e=>{
 	location.href = "/bbs/list";
 });
 

@@ -212,8 +212,8 @@ public class BoardController {
 	public String editForm(
 			@PathVariable Long bnum,
 			Model model) {
-		
-		model.addAttribute("item", boardSVC.itemDetail(bnum)) ;
+			
+		model.addAttribute("editForm", boardSVC.itemDetail(bnum)) ;
 		return "bbs/editForm";
 	}
 	
@@ -222,22 +222,26 @@ public class BoardController {
 	public String edit(
 			@PathVariable Long bnum,
 			@Valid @ModelAttribute EditForm editForm,
-			BindingResult bindingResult) {
+			BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
 		
 		if(bindingResult.hasErrors()) {
+			log.info("게시글수정처리오류:{}",bindingResult);
 			return "bbs/editForm";
 		}
 		
+		BoardDTO boardDTO = new BoardDTO();
+		
+		//첨부파일 파일시스템에 저장후 메타정보 추출
+		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(editForm.getFiles());
+		//UploadFileDTO 변환
+		boardDTO.setFiles(convert(storedFiles));		
+		BeanUtils.copyProperties(editForm, boardDTO);
+		
+		Long modifyedBnum = boardSVC.modifyItem(bnum, boardDTO);
+		redirectAttributes.addAttribute("bnum", modifyedBnum);
+		
 		return "redirect:/bbs/{bnum}";
-	}
-	
-	//게시글 삭제
-	@DeleteMapping("/{bnum}")
-	@ResponseBody
-	public JsonResult<String> delItem(@PathVariable Long bnum) {
-
-		boardSVC.delItem(bnum);
-		return new JsonResult<String>("00", "ok", String.valueOf(bnum));
 	}
 	
 }
