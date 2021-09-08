@@ -1,8 +1,8 @@
 'use strict';
-
-const $modifyBtn = document.getElementById('modifyBtn');  		
-const $delBtn = document.getElementById('delBtn');  		
-const $listBtn = document.getElementById('listBtn');
+const $replyBtn 	= document.getElementById('replyBtn');
+const $modifyBtn 	= document.getElementById('modifyBtn');  		
+const $delBtn 		= document.getElementById('delBtn');  		
+const $listBtn 		= document.getElementById('listBtn');
 
 const handler = e => {
 	//console.log(e);
@@ -13,6 +13,12 @@ const handler = e => {
 		return false;
 	}
 }
+//답글
+$replyBtn.addEventListener("click",e=>{
+		const bnum = e.target.dataset.bnum;
+	location.href=`/bbs/reply/${bnum}`;	
+});
+
 //수정
 $modifyBtn.addEventListener("click", e=>{
 	const bnum = e.target.dataset.bnum;

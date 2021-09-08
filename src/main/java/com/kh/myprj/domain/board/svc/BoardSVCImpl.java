@@ -54,6 +54,11 @@ public class BoardSVCImpl implements BoardSVC {
 	@Override
 	public Long reply(BoardDTO boardDTO) {
 		Long bnum = boardDAO.reply(boardDTO);
+		
+		//첨부파일 메타정보 저장
+		upLoadFileDAO.addFiles(
+				convert(bnum, boardDTO.getBcategory(), boardDTO.getFiles())
+		);		
 		return bnum;
 	}
 
