@@ -53,6 +53,7 @@
 					 <div class="wrap" th:with="email=${session?.loginMember?.email}">
 					    <form action="" class="row gx-3 gy-2 align-items-center" th:method="patch"
 					    	id="writeForm" th:object="${editForm}" enctype="multipart/form-data">
+					    	<input type="hidden" th:field="*{bid}"/>
 					    	<input type="hidden" th:field="*{bemail}"/>
 					    	<input type="hidden" th:field="*{bnickname}"/>
 					      <p class="fs-3 text-center">게시글 수정</p>

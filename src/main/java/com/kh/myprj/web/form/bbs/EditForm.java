@@ -3,10 +3,9 @@ package com.kh.myprj.web.form.bbs;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import com.sun.istack.NotNull;
 
 import lombok.Data;
 
@@ -16,7 +15,7 @@ public class EditForm {
 	private Long 	 bnum;				//글 번호
 	@NotBlank
 	private String bcategory;
-	@NotNull
+  @NotNull
 	private Long bid;		
 	@NotBlank
 	private String bemail;	
