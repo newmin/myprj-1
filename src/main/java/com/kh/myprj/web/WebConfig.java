@@ -5,7 +5,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.kh.myprj.web.interceptor.LoginCheckInterceptor;
-import com.kh.myprj.web.interceptor.MeasuringInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{

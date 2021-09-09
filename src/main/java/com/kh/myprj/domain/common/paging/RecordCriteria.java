@@ -34,6 +34,10 @@ public class RecordCriteria {
 		return reqPage;
 	}
 	
+	/**
+	 * 요청페이지를 입력받아 시작레코드 종료레코드를 구한다.
+	 * @param reqPage
+	 */
 	public void setReqPage(int reqPage) {
 		this.reqPage = reqPage;
 		this.startRec = (reqPage - 1) * REC_COUNT_PER_PAGE + 1;

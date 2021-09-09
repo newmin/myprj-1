@@ -25,7 +25,6 @@ public class PageCriteria {
 		//요청페이지의 시작페이지
 		//(올림(요청페이지/요청페이지에 보여줄 페이지수)-1) * 요청페이지에 보여줄 페이지수+1
 		startPage = (int)(Math.ceil(rc.getReqPage()/(double)PAGE_COUNT_PER_PAGE)-1)*PAGE_COUNT_PER_PAGE+1;
-		
 		//요청페이지의 종료페이지
 		//올림(요청페이지/요청페이지에 보여줄 페이지수) * 요청페이지에 보여줄 페이지수
 		endPage = (int)Math.ceil(rc.getReqPage()/(double)PAGE_COUNT_PER_PAGE)*PAGE_COUNT_PER_PAGE;
