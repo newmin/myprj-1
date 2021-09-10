@@ -23,7 +23,8 @@
     .main .wrap{
       display:flex;
       justify-content: center;
-      margin : 50px 0;
+      margin-top : 50px;
+      margin-bottom : 50px;
     }
     .main .wrap .wrap-bbs{
       width:90%;
@@ -71,8 +72,24 @@
       	<main>  	
 				  <div class="wrap">
 				    <div class="wrap-bbs">
+<!-- 					    <div>
+							  <ol class="breadcrumb">
+							    <li class="breadcrumb-item"><a href="#">Home</a></li>
+							    <li class="breadcrumb-item"><a href="#">게시판</a></li>
+							    <li class="breadcrumb-item active"
+							    	  th:each="bbs : ${category}"
+							    	  th:if="${bbs.code == cate}"
+							    		th:text=${bbs.decode}>
+							    		Data
+							    </li>
+							  </ol>
+							</div> -->
 				      <table class="table table-sm table-hover table-bordered caption-top">
-				        <caption class="bbs-title"><h3>게시글 목록</h3></caption>
+				        <caption class="bbs-title">
+				        	<h3 th:each="bbs : ${category}"
+							    	  th:if="${bbs.code == cate}"
+							    		th:text="${bbs.decode}">게시글 목록</h3>
+				        </caption>
 				        <thead>
 				          <tr class="table-secondary">
 				            <th scope="col">번호</th>
