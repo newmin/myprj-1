@@ -105,10 +105,10 @@
 							  <ul class="pagination pagination-sm justify-content-center">
 							  	<th:block th:if="${pc.prev}">
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{/bbs/list/1}"><i class="fas fa-angle-double-left"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/list/1(cate=${cate})}"><i class="fas fa-angle-double-left"></i></a>
 									  </li>
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{|/bbs/list/${pc.startPage-1}|}"><i class="fas fa-angle-left"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}(reqPage=${pc.startPage-1},cate=${cate})}"><i class="fas fa-angle-left"></i></a>
 									  </li>
 								  </th:block>
 							    <th:block th:each="pnum : ${#numbers.sequence(pc.startPage,pc.endPage)}">
@@ -119,16 +119,16 @@
 								    </li>							    
 								    <li class="page-item" 
 								    		th:if="${pc.rc.reqPage != pnum}">
-								    	<a class="page-link" href="#" th:href="@{|/bbs/list/${pnum}|}" th:text="${pnum}">3</a>
+								    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}(reqPage=${pnum},cate=${cate})}" th:text="${pnum}">3</a>
 								    </li>
 								    </th:block>
 							    </th:block>
 							    <th:block th:if="${pc.next}">
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{|/bbs/list/${pc.endPage+1}|}"><i class="fas fa-angle-right"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}(reqPage=${pc.endPage+1},cate=${cate})}"><i class="fas fa-angle-right"></i></a>
 									  </li>
 								  	<li class="page-item">
-									    	<a class="page-link" href="#" th:href="@{|/bbs/list/${pc.finalEndPage}|}"><i class="fas fa-angle-double-right"></i></a>
+									    	<a class="page-link" href="#" th:href="@{/bbs/list/{reqPage}(reqPage=${pc.finalEndPage},cate=${cate})}"><i class="fas fa-angle-double-right"></i></a>
 									  </li>		
 									</th:block>
 							  </ul>
