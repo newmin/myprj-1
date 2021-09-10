@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -64,9 +65,10 @@ public class BoardController {
 	
 	
 	//원글 작성 양식
-	@GetMapping("/")
+	@GetMapping("")
 	public String writeForm(
 			//@ModelAttribute WriteForm wrtieForm
+			@RequestParam String cate,
 			Model model,
 			HttpServletRequest request
 			) {
@@ -81,6 +83,7 @@ public class BoardController {
 			writeForm.setBid(loginMember.getId());
 			writeForm.setBemail(loginMember.getEmail());
 			writeForm.setBnickname(loginMember.getNickname());
+			writeForm.setBcategory(cate);
 		}
 		
 		model.addAttribute("writeForm",writeForm);
@@ -88,8 +91,9 @@ public class BoardController {
 	}
 	
 	//원글 작성 처리
-	@PostMapping("/")
+	@PostMapping("")
 	public String write(
+			@RequestParam String cate,
 			@Valid @ModelAttribute WriteForm writeForm,
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
@@ -97,7 +101,7 @@ public class BoardController {
 		if(bindingResult.hasErrors()) {
 			return "bbs/writeForm";
 		}
-		
+		log.info("writeForm:{}",writeForm);
 		BoardDTO boardDTO = new BoardDTO();
 		BeanUtils.copyProperties(writeForm, boardDTO);
 		
@@ -207,25 +211,42 @@ public class BoardController {
 	@GetMapping({"/list",
 							 "/list/{reqPage}"})
 	public String list(
+			@RequestParam(required = false) String cate,
 			@PathVariable(required = false) Integer reqPage,
 			Model model
 			) {
+		List<BoardDTO> list = null;
+		
 		//요청페이지가 없으면 1페이지로
 		if(reqPage == null) reqPage = 1;
 		
-		//사용자가 요청한 페이지번호
-		pc.getRc().setReqPage(reqPage);
-		//게시판 전체레코드수
-		pc.setTotalRec(boardSVC.totoalRecordCount());
-		//페이징 계산
-		pc.calculatePaging();
-		
-		List<BoardDTO> list = boardSVC.list(
-				pc.getRc().getStartRec(),
-				pc.getRc().getEndRec());
+		//전체조회
+		if(cate == null) {
+			//사용자가 요청한 페이지번호
+			pc.getRc().setReqPage(reqPage);	
+			//게시판 전체레코드수
+			pc.setTotalRec(boardSVC.totoalRecordCount());
+			
+			list = boardSVC.list(
+					pc.getRc().getStartRec(),
+					pc.getRc().getEndRec());
+			
+		//카테고리별 조회	
+		}else {
+			//사용자가 요청한 페이지번호
+			pc.getRc().setReqPage(reqPage);	
+			//게시판 전체레코드수
+			pc.setTotalRec(boardSVC.totoalRecordCount(cate));
+			
+			list = boardSVC.list(
+					cate,
+					pc.getRc().getStartRec(),
+					pc.getRc().getEndRec());			
+		}
 		
 		model.addAttribute("list", list);
 		model.addAttribute("pc", pc);
+		model.addAttribute("cate",cate);
 		
 		return "bbs/list";
 	}	

@@ -68,12 +68,18 @@ public class BoardSVCImpl implements BoardSVC {
 		List<BoardDTO> list = boardDAO.list();
 		return list;
 	}
+	//게시판 전체 요청페이지 목록 
 	@Override
 	public List<BoardDTO> list(int startRec, int endRec) {
 		List<BoardDTO> list = boardDAO.list(startRec,endRec);
 		return list;
 	}
-	
+	//게시판 카테고리별 요청페이지 목록
+	@Override
+	public List<BoardDTO> list(String bcategory, int startRec, int endRec) {
+		List<BoardDTO> list = boardDAO.list(bcategory,startRec,endRec);
+		return list;
+	}
 	//게시글 상세
 	@Override
 	public BoardDTO itemDetail(Long bnum) {
@@ -117,5 +123,11 @@ public class BoardSVCImpl implements BoardSVC {
 	public long totoalRecordCount() {
 
 		return boardDAO.totoalRecordCount();
+	}
+	//게시판 카테고리별 레코드 총수 
+	@Override
+	public long totoalRecordCount(String bcategory) {
+
+		return boardDAO.totoalRecordCount(bcategory);
 	}
 }

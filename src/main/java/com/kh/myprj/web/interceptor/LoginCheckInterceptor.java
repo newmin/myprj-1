@@ -12,13 +12,22 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginCheckInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		String redirectUrl = null;
 		String requestURI = request.getRequestURI();
-		log.info("LoginCheckInterceptor.preHandle 실행:{}",requestURI);
+		String queryString = request.getQueryString();
+		if(queryString !=null ) {
+			StringBuffer str = new StringBuffer();
+			str.append(requestURI)
+				 .append("?")
+				 .append(queryString);
+			redirectUrl = str.toString();
+		}
+		log.info("LoginCheckInterceptor.preHandle 실행:{}",redirectUrl);
 		
 		HttpSession session = request.getSession(false);
 		if(session == null || session.getAttribute("loginMember") == null) {
 			log.info("미인증 요청 시도!");
-			response.sendRedirect("/login?redirectUrl=" +  requestURI);
+			response.sendRedirect("/login?redirectUrl=" +  redirectUrl);
 			return false;
 		}
 		return true;

@@ -25,8 +25,21 @@ public interface BoardDAO {
 	 * @return
 	 */
 	List<BoardDTO> list();
+	/**
+	 * 게시글 전체 요청페이지 목록
+	 * @param startRec
+	 * @param endRec
+	 * @return
+	 */
 	List<BoardDTO> list(int startRec, int endRec);
-	
+	/**
+	 * 게시글 카테고리별 요청페이지 목록
+	 * @param category
+	 * @param startRec
+	 * @param endRec
+	 * @return
+	 */
+	List<BoardDTO> list(String bcategory, int startRec, int endRec);
 	/**
 	 * 게시글 상세
 	 * @param bnum
@@ -55,8 +68,14 @@ public interface BoardDAO {
 	void updateBhit(Long bnum);
 	
 	/**
-	 * 게시판 전체 레코드 수 
+	 * 게시판 전체 레코드 총수 
 	 * @return
 	 */
 	long totoalRecordCount();
+	/**
+	 * 게시판 카테고리별 레코드 총수 
+	 * @return
+	 */
+	long totoalRecordCount(String bcategory);
+	
 }

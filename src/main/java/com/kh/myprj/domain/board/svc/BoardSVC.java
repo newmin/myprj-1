@@ -26,7 +26,21 @@ public interface BoardSVC {
 	 * @return
 	 */
 	List<BoardDTO> list();
+	/**
+	 * 게시글 전체 요청페이지 목록
+	 * @param startRec
+	 * @param endRec
+	 * @return
+	 */	
 	List<BoardDTO> list(int startRec, int endRec);
+	/**
+	 * 게시글 카테고리별 요청페이지 목록
+	 * @param category
+	 * @param startRec
+	 * @param endRec
+	 * @return
+	 */
+	List<BoardDTO> list(String bcategory, int startRec, int endRec);
 	
 	/**
 	 * 게시글 상세
@@ -53,5 +67,10 @@ public interface BoardSVC {
 	 * 게시판 전체 레코드 수 
 	 * @return
 	 */
-	long totoalRecordCount();	
+	long totoalRecordCount();
+	/**
+	 * 게시판 카테고리별 레코드 총수 
+	 * @return
+	 */
+	long totoalRecordCount(String bcategory);	
 }

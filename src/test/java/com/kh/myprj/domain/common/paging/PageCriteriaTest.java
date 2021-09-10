@@ -14,7 +14,6 @@ public class PageCriteriaTest {
 		rc.setReqPage(5);    //요청페이지		
 		PageCriteria pc = new PageCriteria(rc, 5);
 		pc.setTotalRec(324); //총레코드수 
-		pc.calculatePaging();
 		
 		log.info("시작레코드:{}, 종료레코드:{}", 
 				pc.getRc().getStartRec(), 

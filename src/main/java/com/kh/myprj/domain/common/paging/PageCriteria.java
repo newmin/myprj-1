@@ -21,7 +21,7 @@ public class PageCriteria {
 		calculatePaging();
 	}
 
-	public void calculatePaging() {
+	private void calculatePaging() {
 		//요청페이지의 시작페이지
 		//(올림(요청페이지/요청페이지에 보여줄 페이지수)-1) * 요청페이지에 보여줄 페이지수+1
 		startPage = (int)(Math.ceil(rc.getReqPage()/(double)PAGE_COUNT_PER_PAGE)-1)*PAGE_COUNT_PER_PAGE+1;
@@ -53,6 +53,7 @@ public class PageCriteria {
 	 */
 	public void setTotalRec(long totalRec) {
 		this.totalRec = totalRec;
+		this.calculatePaging();
 	}
 
 	public int getStartPage() {

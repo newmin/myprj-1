@@ -52,17 +52,7 @@
 
   </style>   
   
-  <!-- <script src="/js/xxx.js" defer></script> -->
-  <script>
-  	window.addEventListener("DOMContentLoaded",init);
-  	
-  	function init(e){
-  		writeBtn.addEventListener("click",e=>{
-  			location.href = '/bbs/';
-  		});
-  	}
-  
-  </script>
+  <script src="/js/bbs/list.js" defer></script>
 </head>
 <body>
   <div class="global-wrap">
@@ -109,7 +99,7 @@
 				        </tbody>
 				      </table>
 				      <div class="wrap-bbs-btns">
-				        <button type="button" id="writeBtn" class="btn btn-sm btn-primary">글작성</button>
+				        <button type="button" id="writeBtn" class="btn btn-sm btn-primary" th:data-cate="${cate}">글작성</button>
 				      </div>
 							<div class="wrap-bbs-paging">
 							  <ul class="pagination pagination-sm justify-content-center">
@@ -122,6 +112,7 @@
 									  </li>
 								  </th:block>
 							    <th:block th:each="pnum : ${#numbers.sequence(pc.startPage,pc.endPage)}">
+							    	<th:block th:if="${pnum != 0}">
 	 									<li class="page-item active" aria-current="page"
 	 											th:if="${pc.rc.reqPage == pnum}">
 								      <span class="page-link" th:text="${pnum}">1</span>
@@ -130,6 +121,7 @@
 								    		th:if="${pc.rc.reqPage != pnum}">
 								    	<a class="page-link" href="#" th:href="@{|/bbs/list/${pnum}|}" th:text="${pnum}">3</a>
 								    </li>
+								    </th:block>
 							    </th:block>
 							    <th:block th:if="${pc.next}">
 								  	<li class="page-item">
