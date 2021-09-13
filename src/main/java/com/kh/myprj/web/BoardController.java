@@ -59,8 +59,8 @@ public class BoardController {
 	private FindCriteria fc;
 	
 	@ModelAttribute("category")
-	public List<Code> hobby(){
-		List<Code> list = codeDAO.getCode("A05");
+	public List<Code> category(){
+		List<Code> list = codeDAO.getCode("A05");  //게시판
 		log.info("code-category:{}",list);
 		return list;
 	}
