@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
+import com.kh.myprj.domain.board.dto.SearchDTO;
 import com.kh.myprj.domain.board.svc.BoardSVC;
 import com.kh.myprj.domain.common.dao.CodeDAO;
 import com.kh.myprj.domain.common.dto.MetaOfUploadFile;
 import com.kh.myprj.domain.common.dto.UpLoadFileDTO;
 import com.kh.myprj.domain.common.file.FileStore;
+import com.kh.myprj.domain.common.paging.FindCriteria;
 import com.kh.myprj.domain.common.paging.PageCriteria;
 import com.kh.myprj.domain.common.paging.RecordCriteria;
 import com.kh.myprj.web.api.JsonResult;
@@ -53,8 +55,8 @@ public class BoardController {
 	private final CodeDAO codeDAO;
 	private final FileStore fileStore;
 	@Autowired
-	@Qualifier("pc10")
-	private PageCriteria pc;
+	@Qualifier("fc10")
+	private FindCriteria fc;
 	
 	@ModelAttribute("category")
 	public List<Code> hobby(){
@@ -62,7 +64,6 @@ public class BoardController {
 		log.info("code-category:{}",list);
 		return list;
 	}
-	
 	
 	//원글 작성 양식
 	@GetMapping("")
@@ -207,45 +208,100 @@ public class BoardController {
 		return "bbs/detailItem";
 	}
 	
-	//게시글 목록
-	@GetMapping({"/list",
-							 "/list/{reqPage}"})
-	public String list(
-			@RequestParam(required = false) String cate,
+	//게시글 전체 목록
+	@GetMapping({"/all",
+							 "/all/{reqPage}",
+							 "/all/{reqPage}/{searchType}/{keyword}"})
+	public String all(
 			@PathVariable(required = false) Integer reqPage,
+			@PathVariable(required = false) String searchType,
+			@PathVariable(required = false) String keyword,			
 			Model model
 			) {
 		List<BoardDTO> list = null;
 		
 		//요청페이지가 없으면 1페이지로
 		if(reqPage == null) reqPage = 1;
+		//사용자가 요청한 페이지번호
+		fc.getRc().setReqPage(reqPage);	
 		
-		//전체조회
-		if(cate == null) {
-			//사용자가 요청한 페이지번호
-			pc.getRc().setReqPage(reqPage);	
+		
+		//검색어 유무
+		if((searchType == null || searchType.equals(""))
+				&& (keyword == null || keyword.equals(""))) {
 			//게시판 전체레코드수
-			pc.setTotalRec(boardSVC.totoalRecordCount());
+			fc.setTotalRec(boardSVC.totoalRecordCount());
 			
 			list = boardSVC.list(
-					pc.getRc().getStartRec(),
-					pc.getRc().getEndRec());
-			
-		//카테고리별 조회	
+					fc.getRc().getStartRec(),
+					fc.getRc().getEndRec());		
 		}else {
-			//사용자가 요청한 페이지번호
-			pc.getRc().setReqPage(reqPage);	
 			//게시판 전체레코드수
-			pc.setTotalRec(boardSVC.totoalRecordCount(cate));
+			fc.setTotalRec(boardSVC.totoalRecordCount(searchType,keyword));
+			
+			list = boardSVC.list(
+					fc.getRc().getStartRec(),
+					fc.getRc().getEndRec(),						
+					searchType,keyword
+					);						
+		}
+		
+		fc.setSearchType(searchType);
+		fc.setKeyword(keyword);
+				
+		model.addAttribute("list", list);
+		model.addAttribute("fc", fc);
+		
+		return "bbs/all";
+	}	
+	
+	
+	//게시글 카테고리별 목록
+	@GetMapping({"/list",
+							 "/list/{reqPage}",
+							 "/list/{reqPage}/{searchType}/{keyword}"})
+	public String list(
+			@RequestParam(required = false) String cate,
+			@PathVariable(required = false) Integer reqPage,
+			@PathVariable(required = false) String searchType,
+			@PathVariable(required = false) String keyword,			
+			Model model
+			) {
+		List<BoardDTO> list = null;
+		
+		//요청페이지가 없으면 1페이지로
+		if(reqPage == null) reqPage = 1;
+		//사용자가 요청한 페이지번호
+		fc.getRc().setReqPage(reqPage);	
+		
+		
+		//검색어 유무
+		if((searchType == null || searchType.equals(""))
+				&& (keyword == null || keyword.equals(""))) {
+			//게시판 전체레코드수
+			fc.setTotalRec(boardSVC.totoalRecordCount(cate));
 			
 			list = boardSVC.list(
 					cate,
-					pc.getRc().getStartRec(),
-					pc.getRc().getEndRec());			
+					fc.getRc().getStartRec(),
+					fc.getRc().getEndRec());		
+		}else {
+			//게시판 전체레코드수
+			fc.setTotalRec(boardSVC.totoalRecordCount(cate,searchType,keyword));
+			
+			list = boardSVC.list(
+					new SearchDTO(
+							cate, 
+							fc.getRc().getStartRec(), fc.getRc().getEndRec(), 
+							searchType, keyword)
+			);						
 		}
 		
+		fc.setSearchType(searchType);
+		fc.setKeyword(keyword);
+				
 		model.addAttribute("list", list);
-		model.addAttribute("pc", pc);
+		model.addAttribute("fc", fc);
 		model.addAttribute("cate",cate);
 		
 		return "bbs/list";

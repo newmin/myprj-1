@@ -1,14 +1,8 @@
 'use strict';
 
-const $writeBtn 	= document.getElementById('writeBtn');
 const $searchBtn 	= document.getElementById('searchBtn');
 const $searchType = document.getElementById('searchType');
 const $keyword 		= document.getElementById('keyword');
-
-$writeBtn.addEventListener("click",e=>{
-	const cate = e.target.dataset.cate;
-	location.href = `/bbs?cate=${cate}`;
-});
 
 //검색 버튼 클릭시
 $searchBtn.addEventListener('click',e=>{
@@ -22,7 +16,7 @@ $searchBtn.addEventListener('click',e=>{
 	}
 	
 		const cate = e.target.dataset.cate;
-		location.href = `/bbs/list/1/${$searchType.value}/${$keyword.value}?cate=${cate}`;
+		location.href = `/bbs/all/1/${$searchType.value}/${$keyword.value}`;
 });
 
 //검색입력창 엔터키 눌렀을때
@@ -39,7 +33,7 @@ $keyword.addEventListener('keydown',e=>{
 		}
 	
 		const cate = e.target.dataset.cate;
-		location.href = `/bbs/list/1/${$searchType.value}/${$keyword.value}?cate=${cate}`;
+		location.href = `/bbs/all/1/${$searchType.value}/${$keyword.value}`;
 
 	}
 });

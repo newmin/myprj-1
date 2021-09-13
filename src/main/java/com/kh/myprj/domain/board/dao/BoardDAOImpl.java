@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
+import com.kh.myprj.domain.board.dto.SearchDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -239,7 +240,69 @@ public class BoardDAOImpl implements BoardDAO {
 		
 		return list;
 	}	
+	//게시판 전체 검색 목록
+	@Override
+	public List<BoardDTO> list(int startRec, int endRec, String searchType, String keyword) {
 
+		StringBuffer sql = new StringBuffer();
+		sql.append("select t1.* ");
+		sql.append("  from (select row_number() over(order by bgroup desc, bstep asc) as num, ");
+		sql.append("               bnum,    ");
+		sql.append("               bcategory,   ");
+		sql.append("               btitle,    ");
+		sql.append("               bnickname,   ");
+		sql.append("               bid,   ");
+		sql.append("               bemail,    ");
+		sql.append("               bhit,  ");
+		sql.append("               pbnum,   ");
+		sql.append("               bgroup,  ");
+		sql.append("               bstep,   ");
+		sql.append("               bindent,   ");
+		sql.append("               status,  ");
+		sql.append("               bcdate,  ");
+		sql.append("               budate   ");
+		sql.append("          from board t1");
+		sql.append("         where ");
+		
+		switch (searchType) {
+		case "TC": //제목+내용
+			sql.append("( t1.btitle  like '%" + keyword + "%' ");
+			sql.append("   or t1.bcontent like '%" + keyword + "%' ) ");
+			break;
+		case "T":	//제목
+			sql.append("t1.btitle  like '%" + keyword + "%' ");
+			break;
+		case "C":	//내용
+			sql.append("t1.bcontent  like '%" + keyword + "%' ");
+			break;
+		case "N": //별칭
+			sql.append("t1.bnickname  like '%" + keyword + "%'" );
+			break;
+		case "E":  //아이디(이메일)
+			sql.append("t1.bemail  like '%" + keyword + "%'" );
+			break;
+		case "A":  //전체			
+			sql.append("( t1.btitle  like '%" + keyword + "%' ");
+			sql.append("   or t1.bcontent like '%" + keyword + "%' ");
+			sql.append("   or t1.bnickname like '%" + keyword + "%' ");
+			sql.append("   or t1.bemail like '%" + keyword + "%' )");
+			break;
+
+		default:
+			break;
+		}				
+		sql.append(") t1  ");		
+		sql.append(" where num between ? and ?  ");
+		
+	
+		List<BoardDTO> list = jt.query(
+				sql.toString(), 
+				new BeanPropertyRowMapper<>(BoardDTO.class),
+				startRec, endRec
+				);	
+		
+		return list;
+	}
 	//게시판 카테고리별 요청페이지 목록
 	@Override
 	public List<BoardDTO> list(String bcategory, int startRec, int endRec) {
@@ -273,6 +336,67 @@ public class BoardDAOImpl implements BoardDAO {
 		return list;
 	}
 	
+	@Override
+	public List<BoardDTO> list(SearchDTO searchDTO) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select t1.* ");
+		sql.append("  from (select row_number() over(order by bgroup desc, bstep asc) as num, ");
+		sql.append("               bnum,    ");
+		sql.append("               bcategory,   ");
+		sql.append("               btitle,    ");
+		sql.append("               bnickname,   ");
+		sql.append("               bid,   ");
+		sql.append("               bemail,    ");
+		sql.append("               bhit,  ");
+		sql.append("               pbnum,   ");
+		sql.append("               bgroup,  ");
+		sql.append("               bstep,   ");
+		sql.append("               bindent,   ");
+		sql.append("               status,  ");
+		sql.append("               bcdate,  ");
+		sql.append("               budate   ");
+		sql.append("          from board t1");
+		sql.append("         where bcategory = ? ");
+		
+		switch (searchDTO.getSearchType()) {
+		case "TC": //제목+내용
+			sql.append("and ( t1.btitle  like '%" + searchDTO.getKeyword() + "%' ");
+			sql.append("   or t1.bcontent like '%" + searchDTO.getKeyword() + "%' ) ");
+			break;
+		case "T":	//제목
+			sql.append("and t1.btitle  like '%" + searchDTO.getKeyword() + "%' ");
+			break;
+		case "C":	//내용
+			sql.append("and t1.bcontent  like '%" + searchDTO.getKeyword() + "%' ");
+			break;
+		case "N": //별칭
+			sql.append("and t1.bnickname  like '%" + searchDTO.getKeyword() + "%'" );
+			break;
+		case "E":  //아이디(이메일)
+			sql.append("and t1.bemail  like '%" + searchDTO.getKeyword() + "%'" );
+			break;
+		case "A":  //전체			
+			sql.append("and ( t1.btitle  like '%" + searchDTO.getKeyword() + "%' ");
+			sql.append("   or t1.bcontent like '%" + searchDTO.getKeyword() + "%' ");
+			sql.append("   or t1.bnickname like '%" + searchDTO.getKeyword() + "%' ");
+			sql.append("   or t1.bemail like '%" + searchDTO.getKeyword() + "%' )");
+			break;
+
+		default:
+			break;
+		}				
+		sql.append(") t1  ");		
+		sql.append(" where num between ? and ?  ");
+		
+	
+		List<BoardDTO> list = jt.query(
+				sql.toString(), 
+				new BeanPropertyRowMapper<>(BoardDTO.class),
+				searchDTO.getCategory(), searchDTO.getStarcRec(), searchDTO.getEndRec()
+				);	
+		
+		return list;
+	}
 	//게시글 상세
 	@Override
 	public BoardDTO itemDetail(Long bnum) {
@@ -339,6 +463,45 @@ public class BoardDAOImpl implements BoardDAO {
 		return totalCount;
 	}
 	
+	//게시판 전체 검색 레코드 수
+	@Override
+	public long totoalRecordCount(String searchType, String keyword) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select count(*) ");
+		sql.append("	from board t1");
+		sql.append(" where ");
+		
+		switch (searchType) {
+		case "TC": //제목+내용
+			sql.append("( t1.btitle  like '%" + keyword + "%' ");
+			sql.append("   or t1.bcontent like '%" + keyword + "%' ) ");
+			break;
+		case "T":	//제목
+			sql.append("t1.btitle  like '%" + keyword + "%' ");
+			break;
+		case "C":	//내용
+			sql.append("t1.bcontent  like '%" + keyword + "%' ");
+			break;
+		case "N": //별칭
+			sql.append("t1.bnickname  like '%" + keyword + "%'" );
+			break;
+		case "E":  //아이디
+			sql.append("t1.bemail  like '%" + keyword + "%'" );
+			break;
+		case "A":  //전체			
+			sql.append("( t1.btitle  like '%" + keyword + "%' ");
+			sql.append("   or t1.bcontent like '%" + keyword + "%' ");
+			sql.append("   or t1.bnickname like '%" + keyword + "%' ");
+			sql.append("   or t1.bemail like '%" + keyword + "%' )");
+			break;
+
+		default:
+			break;
+		}				
+		long totalCount = jt.queryForObject(sql.toString(), Long.class);
+		return totalCount;
+	}
+	
 	//게시판 카테고리별 레코드수
 	@Override
 	public long totoalRecordCount(String bcategory) {
@@ -350,8 +513,43 @@ public class BoardDAOImpl implements BoardDAO {
 		long totalCount = jt.queryForObject(sql.toString(), Long.class, bcategory);
 		return totalCount;
 	}
+	
+	//게시판 카테고리별 검색결과 레코드수
+	@Override
+	public long totoalRecordCount(String bcategory, String searchType, String keyword) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select count(*) ");
+		sql.append("	from board t1");
+		sql.append(" where bcategory = ?");
+		
+		switch (searchType) {
+		case "TC": //제목+내용
+			sql.append("and ( t1.btitle  like '%" + keyword + "%' ");
+			sql.append("   or t1.bcontent like '%" + keyword + "%' ) ");
+			break;
+		case "T":	//제목
+			sql.append("and t1.btitle  like '%" + keyword + "%' ");
+			break;
+		case "C":	//내용
+			sql.append("and t1.bcontent  like '%" + keyword + "%' ");
+			break;
+		case "N": //별칭
+			sql.append("and t1.bnickname  like '%" + keyword + "%'" );
+			break;
+		case "E":  //아이디
+			sql.append("and t1.bemail  like '%" + keyword + "%'" );
+			break;
+		case "A":  //전체			
+			sql.append("and ( t1.btitle  like '%" + keyword + "%' ");
+			sql.append("   or t1.bcontent like '%" + keyword + "%' ");
+			sql.append("   or t1.bnickname like '%" + keyword + "%' ");
+			sql.append("   or t1.bemail like '%" + keyword + "%' )");
+			break;
+
+		default:
+			break;
+		}				
+		long totalCount = jt.queryForObject(sql.toString(), Long.class, bcategory);
+		return totalCount;
+	}
 }
-
-
-
-

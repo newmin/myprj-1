@@ -21,6 +21,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 				 .append("?")
 				 .append(queryString);
 			redirectUrl = str.toString();
+		}else {
+			redirectUrl = requestURI;
 		}
 		log.info("LoginCheckInterceptor.preHandle 실행:{}",redirectUrl);
 		

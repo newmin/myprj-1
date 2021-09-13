@@ -3,6 +3,7 @@ package com.kh.myprj.domain.board.svc;
 import java.util.List;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
+import com.kh.myprj.domain.board.dto.SearchDTO;
 import com.kh.myprj.domain.common.dto.MetaOfUploadFile;
 
 public interface BoardSVC {
@@ -41,7 +42,22 @@ public interface BoardSVC {
 	 * @return
 	 */
 	List<BoardDTO> list(String bcategory, int startRec, int endRec);
+	/**
+	 * 게시글 전체 검색 목록
+	 * @param startRec
+	 * @param endRec
+	 * @param searchType
+	 * @param keyword
+	 * @return
+	 */
+	List<BoardDTO> list(int startRec, int endRec, String searchType, String keyword);
 	
+	/**
+	 * 게시글 카테고리별 검색결과 목록
+	 * @param searchDTO
+	 * @return
+	 */
+	List<BoardDTO> list(SearchDTO searchDTO);
 	/**
 	 * 게시글 상세
 	 * @param bnum
@@ -69,8 +85,22 @@ public interface BoardSVC {
 	 */
 	long totoalRecordCount();
 	/**
-	 * 게시판 카테고리별 레코드 총수 
+	 * 게시판 전체 검색 레코드 총수
+	 * @param searchType
+	 * @param keyword
 	 * @return
 	 */
+	long totoalRecordCount(String searchType, String keyword);	
+	/**
+	 * 게시판 카테고리별 레코드 총수 
+	 * @return
+	 */	
 	long totoalRecordCount(String bcategory);	
+	
+	/**
+	 * 게시판 카테고리별 검색 레코드 총수 
+	 * @return
+	 */
+	long totoalRecordCount(String bcategory, String searchType, String keyword);
+	
 }

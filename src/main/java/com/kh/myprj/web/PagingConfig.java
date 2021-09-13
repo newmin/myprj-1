@@ -3,6 +3,7 @@ package com.kh.myprj.web;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.kh.myprj.domain.common.paging.FindCriteria;
 import com.kh.myprj.domain.common.paging.PageCriteria;
 import com.kh.myprj.domain.common.paging.RecordCriteria;
 
@@ -19,7 +20,6 @@ public class PagingConfig {
 	public RecordCriteria rc10() {
 		return new RecordCriteria(REC10);
 	}
-	
 	@Bean(name = "pc10")
 	public PageCriteria pc10() {
 		return new PageCriteria(rc10(), PAGE10);
@@ -32,4 +32,14 @@ public class PagingConfig {
 	public PageCriteria pc5() {
 		return new PageCriteria(rc5(), PAGE5);
 	}	
+	@Bean(name = "fc10")
+	public FindCriteria fc10() {
+		return new FindCriteria(rc10(), PAGE10);
+	}
+	@Bean(name = "fc5")
+	public FindCriteria fc5() {
+		return new FindCriteria(rc5(), PAGE5);
+	}	
+	
+	
 }
