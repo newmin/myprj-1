@@ -3,11 +3,11 @@ package com.kh.myprj.domain.member.svc;
 import java.sql.Date;
 import java.util.List;
 
-
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kh.myprj.domain.common.dao.UpLoadFileDAO;
+import com.kh.myprj.domain.common.dto.UpLoadFileDTO;
 import com.kh.myprj.domain.member.dao.MemberDAO;
 import com.kh.myprj.domain.member.dto.MemberDTO;
 
@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberSVCImpl implements MemberSVC{
 
 	private final MemberDAO memberDAO;
+	private final UpLoadFileDAO upLoadFileDAO;
 	
 	//가입
 	@Override
@@ -41,6 +42,8 @@ public class MemberSVCImpl implements MemberSVC{
 		MemberDTO memberDTO = memberDAO.findByEmail(email);
 		//회원의 취미 가져오기
 		memberDTO.setHobby(memberDAO.getHobby(memberDTO.getId()));
+		//회원 이미지 정보 가져오기
+		memberDTO.setFile(upLoadFileDAO.getFileByRid(String.valueOf(memberDTO.getId())));		
 		return memberDTO;
 	}
 	
@@ -76,6 +79,18 @@ public class MemberSVCImpl implements MemberSVC{
 		//취미수정
 		memberDAO.delHobby(id);
 		memberDAO.addHobby(id,memberDTO.getHobby());
+		
+		//이미지 추가정보(참조아이디, 분류코드)
+		if(memberDTO.getFile() !=null ) {
+			UpLoadFileDTO upLoadFileDTO = memberDTO.getFile();
+			upLoadFileDTO.setRid(String.valueOf(id));
+			upLoadFileDTO.setCode("A0401");
+		
+			//기존이미지 삭제
+			upLoadFileDAO.deleteFileByRid(String.valueOf(id));
+			//이미지 첨부
+			upLoadFileDAO.addFile(upLoadFileDTO);
+		}
 	}
 
 	//이메일 찾기

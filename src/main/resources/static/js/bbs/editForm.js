@@ -18,8 +18,9 @@ const handler = (res,target) => {
 if($delFiles){
 	Array.from($delFiles).forEach(ele=>{
 		ele.addEventListener("click",e=>{
+			const cate = e.target.dataset.cate;
 			const sfname = e.target.dataset.sfname;
-			const url = `/bbs/attach/${sfname}`;
+			const url = `/bbs/attach/${cate}/${sfname}`;
 			if(confirm('삭제하시겠습니까?')){
 				request.delete(url)
 							 .then(res=>res.json())

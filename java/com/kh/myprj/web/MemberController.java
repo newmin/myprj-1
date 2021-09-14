@@ -1,5 +1,6 @@
 package com.kh.myprj.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.myprj.domain.common.dao.CodeDAO;
+import com.kh.myprj.domain.common.dto.MetaOfUploadFile;
+import com.kh.myprj.domain.common.dto.UpLoadFileDTO;
+import com.kh.myprj.domain.common.file.FilePath;
+import com.kh.myprj.domain.common.file.FileStore;
 import com.kh.myprj.domain.member.dto.MemberDTO;
 import com.kh.myprj.domain.member.svc.MemberSVC;
 import com.kh.myprj.web.form.Code;
@@ -41,6 +46,7 @@ public class MemberController {
 
 	private final MemberSVC memberSVC;
 	private final CodeDAO codeDAO;
+	private final FileStore fileStore;	
 	
 	@ModelAttribute("hobby")
 	public List<Code> hobby(){
@@ -124,8 +130,10 @@ public class MemberController {
 		
 		//회원정보 가져오기
 		MemberDTO memberDTO =  memberSVC.findByEmail(loginMember.getEmail());
+		
 		EditForm editForm = new EditForm();
-		BeanUtils.copyProperties(memberDTO, editForm);
+		BeanUtils.copyProperties(memberDTO, editForm, "imageFile", "savedFile");
+		editForm.setSavedFile(memberDTO.getFile());
 		
 		if(memberDTO.getLetter().equals("1")) {
 			editForm.setLetter(true);
@@ -140,12 +148,15 @@ public class MemberController {
 	/**
 	 * 회원수정처리
 	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
 	 */
 	@PatchMapping("/edit")
 	public String edit(
 			@Valid @ModelAttribute EditForm editForm,
 			BindingResult bindingResult,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws IllegalStateException, IOException {
+		
 		log.info("회원수정처리 호출됨");
 		HttpSession session = request.getSession(false);
 		LoginMember loginMember 
@@ -164,8 +175,17 @@ public class MemberController {
 			return "mypage/memberEditForm";
 		}
 		
-		
 		MemberDTO mdto = new MemberDTO();
+		
+		if(editForm.getImageFile() != null) {
+			//기존 프로파일 이미지 존재하면 삭제
+					
+			//첨부파일 파일시스템에 저장후 메타정보 추출
+			MetaOfUploadFile storedFile = fileStore.storeFile(editForm.getImageFile());
+			//UploadFileDTO 변환
+			mdto.setFile(convert(storedFile));
+		}
+		
 		BeanUtils.copyProperties(editForm, mdto);
 		mdto.setLetter(editForm.isLetter() ? "1" : "0");
 		
@@ -173,6 +193,13 @@ public class MemberController {
 		log.info("=={},{}",loginMember.getId(), mdto);
 		return "redirect:/members/edit";
 	}
+	
+	private UpLoadFileDTO convert(MetaOfUploadFile attatchFile) {
+		UpLoadFileDTO uploadFileDTO = new UpLoadFileDTO();
+		BeanUtils.copyProperties(attatchFile, uploadFileDTO);
+		return uploadFileDTO;
+	}
+	
 	/**
 	 * 회원조회
 	 * @return

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.myprj.domain.board.dto.BoardDTO;
@@ -33,9 +31,6 @@ import com.kh.myprj.domain.common.dto.MetaOfUploadFile;
 import com.kh.myprj.domain.common.dto.UpLoadFileDTO;
 import com.kh.myprj.domain.common.file.FileStore;
 import com.kh.myprj.domain.common.paging.FindCriteria;
-import com.kh.myprj.domain.common.paging.PageCriteria;
-import com.kh.myprj.domain.common.paging.RecordCriteria;
-import com.kh.myprj.web.api.JsonResult;
 import com.kh.myprj.web.form.Code;
 import com.kh.myprj.web.form.LoginMember;
 import com.kh.myprj.web.form.bbs.EditForm;
@@ -105,9 +100,9 @@ public class BoardController {
 		log.info("writeForm:{}",writeForm);
 		BoardDTO boardDTO = new BoardDTO();
 		BeanUtils.copyProperties(writeForm, boardDTO);
-		
-		//첨부파일 파일시스템에 저장후 메타정보 추출
-		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(writeForm.getFiles());
+			
+		//첨부파일 파일시스템에 저장후 메타정보 추출		
+		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(cate, writeForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));
 		
@@ -187,7 +182,8 @@ public class BoardController {
 		boardDTO.setBindent(pboardDTO.getBindent());
 		
 		//첨부파일 파일시스템에 저장후 메타정보 추출
-		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(replyForm.getFiles());
+		List<MetaOfUploadFile> storedFiles 
+			= fileStore.storeFiles(replyForm.getBcategory(), replyForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));
 		
@@ -331,9 +327,10 @@ public class BoardController {
 		}
 		
 		BoardDTO boardDTO = new BoardDTO();
-		
+					
 		//첨부파일 파일시스템에 저장후 메타정보 추출
-		List<MetaOfUploadFile> storedFiles = fileStore.storeFiles(editForm.getFiles());
+		List<MetaOfUploadFile> storedFiles 
+			= fileStore.storeFiles(editForm.getBcategory(), editForm.getFiles());
 		//UploadFileDTO 변환
 		boardDTO.setFiles(convert(storedFiles));		
 		BeanUtils.copyProperties(editForm, boardDTO);
@@ -345,6 +342,3 @@ public class BoardController {
 	}
 	
 }
-
-
-

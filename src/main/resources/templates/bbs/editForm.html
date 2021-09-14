@@ -99,9 +99,9 @@
 					        <label for="file" class="col-sm-2 col-form-label text-center">첨부</label>
 					        <div class="col-sm-10" >
 					        	<p th:each="file : *{files}">
-					          	<a th:href="@{|/attach/${file.store_fname}/${file.upload_fname}}|"
+					          	<a th:href="@{|/attach/*{bcategory}/${file.store_fname}/${file.upload_fname}}|"
 					          	 th:text="${file.upload_fname}"></a>
-					          	<i class="fas fa-backspace" th:data-sfname="${file.store_fname}"></i>
+					          	<i class="fas fa-backspace" th:data-cate="*{bcategory}" th:data-sfname="${file.store_fname}"></i>
 					          </p>
 					        </div>
 					      </div>

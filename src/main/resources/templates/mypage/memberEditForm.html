@@ -4,7 +4,7 @@
       th:replace="~{fragment/main::copyParam(
       	~{::title},	<!--/* title 		대체 */-->
       	~{::link},	<!--/* links 		추가 */-->
-      	~{},				<!--/* scripts 	생략 */-->
+      	~{::script},<!--/* scripts 	생략 */-->
       	~{::style},	<!--/* style */-->
       	~{},				<!--/* header */-->
       	~{::nav},		<!--/* nav */ 기본값 사용 */--> 
@@ -19,7 +19,7 @@
   <title>회원수정</title>
   
   <link rel="stylesheet" href="/css/xxx.css" />
-  <script src="/js/xxx.js" defer></script>
+  <script src="/js/mypage/memberEditForm.js" defer></script>
   <style>
 	  .global-wrap .gnb .depth1 {
 	 		 background-color: #c60055; color: #fff;
@@ -34,6 +34,18 @@
   		margin:0 auto;
   		width:250px;
   	}
+  	  
+    .global-wrap .main #imageFile{
+    	display:none;
+    }
+    .global-wrap .main #dropbox{
+    	max-width:180px;
+    	padding:5px;
+    	border:5px solid gray;
+    }	
+    .global-wrap .main #profileImg{
+    	width:100%;
+    }
   </style>
   
 </head>
@@ -53,12 +65,19 @@
       <div class="inner main-inner">
       	<main>
       	
-					<form class="frm" th:action="@{/members/edit}" th:method="patch" th:object="${editForm}" >
+					<form class="frm" th:action="@{/members/edit}" th:method="patch" th:object="${editForm}" 
+						enctype="multipart/form-data">
 						<ul>
 							<li><h3 class="title">회원 수정</h3></li>
       				<li th:errors="*{global}" th:errorclass="field-msg">
 								<p th:each="err : ${#fields.globalErrors()}"
 																			 th:text="${err}">글로벌 오류 메시지</p>      				
+      				</li>
+      				<li>
+      				  <input type="file" th:field="*{imageFile}">
+      					<div id="dropbox">
+      						<img src="#" th:src="@{|/images/*{savedFile?.store_fname}|}" alt="이미지" id="profileImg"/>
+      					</div>
       				</li>							
 							<li><label for="email">아이디</label></li>
 							<li><input type="text" th:field="*{email}" readonly="readonly"/></li>

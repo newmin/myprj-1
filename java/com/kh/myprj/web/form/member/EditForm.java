@@ -7,6 +7,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.kh.myprj.domain.common.dto.UpLoadFileDTO;
+
 import lombok.Data;
 
 @Data
@@ -23,6 +27,10 @@ public class EditForm {
 	private Date birth;							//생년월일
 	private List<String> hobby;			//취미
 	private boolean letter;					//뉴스레터가입유무
+	
+	private MultipartFile imageFile; 		//파일첨부신규
+	
+	private UpLoadFileDTO savedFile; 		//파일첨부상세			
 }
 
 
