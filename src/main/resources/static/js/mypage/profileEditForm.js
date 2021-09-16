@@ -2,10 +2,11 @@
 const $dropbox 							= document.getElementById('dropbox');
 const $imgFile 							= document.getElementById('imgFile');
 const $profileImg   				= document.getElementById('profileImg');
-const $delProfileImgBtn 		= document.getElementById('delProfileImgBtn');
+const $popUpDelBtn 					= document.getElementById('popUpDelBtn');
 const $changeProfileImgBtn 	= document.getElementById('changeProfileImgBtn');
 const $modifyNicknameBtn 	 	= document.getElementById('modifyNicknameBtn');
-const $profileInfo 					=	document.getElementById('profileInfo')
+const $profileInfo 					=	document.getElementById('profileInfo');
+
 const dragover_e = e => {
 	e.preventDefault();//필수: 생략하면 drop이벤트가 발생하지 않는다.
 }
@@ -101,7 +102,7 @@ const change_e = e=>{
 }
 
 //프로파일 이미지 삭제 성공 후처리  
-const delProfileImgBtn_h = res => {
+const popUpDelBtn_h = res => {
 	//console.dir(res);
 	if(res.rtcd == '00'){
 		console.log('이미지 삭제됨!');
@@ -114,14 +115,14 @@ const delProfileImgBtn_h = res => {
 } 
  
 //프로파일 이미지 삭제 요청 
-const delProfileImgBtn_e = e => {
+const popUpDelBtn_e = e => {
 	const {cate,sfname} = $profileInfo.dataset;
 	if(!cate || !sfname) return false;
-	if(!confirm('삭제하시겠습니까?')) return false;
+
 	const url = `/attach/${cate}/${sfname}`;
 	request.delete(url)
 			 .then(res=>res.json())
-			 .then(res=>delProfileImgBtn_h(res))
+			 .then(res=>popUpDelBtn_h(res))
 			 .catch(err=>console.error('Error:', err));	
 };
 
@@ -155,8 +156,8 @@ $dropbox.addEventListener('click',click_e);
 $imgFile.addEventListener('change',change_e);
 
 //이미지 변경,삭제
-$changeProfileImgBtn.addEventListener('click',click_e)
-$delProfileImgBtn.addEventListener('click', delProfileImgBtn_e);
+$changeProfileImgBtn.addEventListener('click',click_e);
+$popUpDelBtn.addEventListener('click', popUpDelBtn_e);
 //별칭 수정
 $modifyNicknameBtn.addEventListener('click',modifyNickname_e);
 
