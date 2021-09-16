@@ -113,6 +113,13 @@ public interface MemberDAO {
 	 * @param postPw
 	 */
 	int changePw(String email, String prePw, String postPw);
+	
+	/**
+	 * 별칭 변경
+	 * @param email
+	 * @param nickname
+	 */
+	int changeNickname(Long id, String nickname);
 }
 
 

@@ -292,6 +292,17 @@ public class MemberDAOImpl implements MemberDAO {
 		
 		return jt.update(sql.toString(), postPw, email, prePw);
 	}
+	
+	//별칭변경
+	@Override
+	public int changeNickname(Long id, String nickname) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("update member ");
+		sql.append("	 set nickname = ? ");   
+		sql.append(" where id = ? ");
+		
+		return jt.update(sql.toString(),nickname, id);		
+	}
 }
 
 

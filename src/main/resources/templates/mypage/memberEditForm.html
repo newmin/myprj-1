@@ -19,6 +19,7 @@
   <title>회원수정</title>
   
   <link rel="stylesheet" href="/css/xxx.css" />
+  <script src="/js/common/ajaxCall.js" defer></script>
   <script src="/js/mypage/memberEditForm.js" defer></script>
   <style>
 	  .global-wrap .gnb .depth1 {
@@ -32,11 +33,14 @@
   	}
   	.global-wrap .main .inner.main-inner main .frm{
   		margin:0 auto;
-  		width:250px;
+  		width:300px;
+			border:1px solid #494949;
+			border-radius:10px;
+			padding:20px;
   	}
   	  
-    .global-wrap .main #imageFile{
-    	display:none;
+    .global-wrap .main #imgFile{
+    	display:none; 
     }
     .global-wrap .main #dropbox{
     	max-width:180px;
@@ -44,6 +48,10 @@
     	border:5px solid gray;
     }	
     .global-wrap .main #profileImg{
+    	width:100%;
+    }
+    .global-wrap .main #modifyBtn{
+    	margin-top:10px;
     	width:100%;
     }
   </style>
@@ -64,21 +72,16 @@
     <div class="main">
       <div class="inner main-inner">
       	<main>
-      	
 					<form class="frm" th:action="@{/members/edit}" th:method="patch" th:object="${editForm}" 
 						enctype="multipart/form-data">
+						<input type="hidden" th:field="*{savedImgFile.code}"/>
+						<input type="hidden" th:field="*{savedImgFile.store_fname}"/>
 						<ul>
 							<li><h3 class="title">회원 수정</h3></li>
       				<li th:errors="*{global}" th:errorclass="field-msg">
 								<p th:each="err : ${#fields.globalErrors()}"
 																			 th:text="${err}">글로벌 오류 메시지</p>      				
-      				</li>
-      				<li>
-      				  <input type="file" th:field="*{imageFile}">
-      					<div id="dropbox">
-      						<img src="#" th:src="@{|/images/*{savedFile?.store_fname}|}" alt="이미지" id="profileImg"/>
-      					</div>
-      				</li>							
+      				</li>				
 							<li><label for="email">아이디</label></li>
 							<li><input type="text" th:field="*{email}" readonly="readonly"/></li>
 
@@ -120,7 +123,7 @@
 							<li>
 								<input type="checkbox" th:field="*{letter}"/><span>뉴스레터 수신에 동의합니다.</span>
 							</li>								
-							<li><input type="submit" value="회원수정" id="modifyBtn"></li>
+							<li><button type="submit" id="modifyBtn" class="btn btn-secondary btn-sm">회원수정</button></li>
 						</ul>
 					</form>        	
       	

@@ -104,9 +104,8 @@ create table uploadfile(
   ftype varchar2(100) not null,
   cdate timestamp default systimestamp,
   udate timestamp,
-  constraint uploadfile_fid_pk primary key(fid),
-  --constraint uploadfile_rid_fk1 FOREIGN key(rid) references product,  
-  constraint uploadfile_pid_fk2 FOREIGN key(code) references code
+  constraint uploadfile_fid_pk primary key(fid),  
+  constraint uploadfile_code_fk2 FOREIGN key(code) references code
 );
 
 drop sequence uploadfile_fid_seq;

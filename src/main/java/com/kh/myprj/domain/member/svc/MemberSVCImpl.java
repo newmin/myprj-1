@@ -79,18 +79,6 @@ public class MemberSVCImpl implements MemberSVC{
 		//취미수정
 		memberDAO.delHobby(id);
 		memberDAO.addHobby(id,memberDTO.getHobby());
-		
-		//이미지 추가정보(참조아이디, 분류코드)
-		if(memberDTO.getFile() !=null ) {
-			UpLoadFileDTO upLoadFileDTO = memberDTO.getFile();
-			upLoadFileDTO.setRid(String.valueOf(id));
-			upLoadFileDTO.setCode("A0401");
-		
-			//기존이미지 삭제
-			upLoadFileDAO.deleteFileByRid(String.valueOf(id));
-			//이미지 첨부
-			upLoadFileDAO.addFile(upLoadFileDTO);
-		}
 	}
 
 	//이메일 찾기
@@ -133,5 +121,12 @@ public class MemberSVCImpl implements MemberSVC{
 //		return isChanged;
 		
 		return memberDAO.changePw(email, prePw, postPw) == 1 ? true : false;
+	}
+	
+	//별칭 변경
+	@Override
+	public boolean changeNickname(Long id, String nickname) {
+		
+		return memberDAO.changeNickname(id, nickname) == 1 ? true : false;
 	}
 }

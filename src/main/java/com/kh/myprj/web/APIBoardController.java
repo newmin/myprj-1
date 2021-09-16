@@ -33,20 +33,6 @@ public class APIBoardController {
 		return new JsonResult<String>("00", "ok", String.valueOf(bnum));
 	}
 	
-	//첨부파일 삭제 by fid
-	@DeleteMapping("/attach/{cate}/{sfname}")
-	public JsonResult<String> delFile(
-			@PathVariable String cate,
-			@PathVariable String sfname){
-		
-		if(fileStore.deleteFile(cate,sfname)) {
-			upLoadFileDAO.deleteFileBySfname(sfname);
-		}else {
-			return new JsonResult<String>("01","nok","파일삭제 실패!");
-		}
-		
-		return new JsonResult<String>("00","ok","파일삭제 성공");
-	}
 }
 
 

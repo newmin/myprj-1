@@ -1,5 +1,7 @@
 package com.kh.myprj.web.interceptor;
 
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,8 +16,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		String redirectUrl = null;
 		String requestURI = request.getRequestURI();
-		String queryString = request.getQueryString();
-		if(queryString !=null ) {
+		if(request.getQueryString() != null ) {
+			String queryString = URLEncoder.encode(request.getQueryString(), "UTF-8");
 			StringBuffer str = new StringBuffer();
 			str.append(requestURI)
 				 .append("?")

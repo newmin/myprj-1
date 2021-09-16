@@ -28,9 +28,8 @@ public class EditForm {
 	private List<String> hobby;			//취미
 	private boolean letter;					//뉴스레터가입유무
 	
-	private MultipartFile imageFile; 		//파일첨부신규
-	
-	private UpLoadFileDTO savedFile; 		//파일첨부상세			
+	private MultipartFile imgFile; 		//신규파일	
+	private UpLoadFileDTO savedImgFile; 		//기존파일
 }
 
 
